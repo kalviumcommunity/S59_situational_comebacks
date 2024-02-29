@@ -12,7 +12,7 @@ router.get("/",async(req,res)=>{
         res.json(pickups)
     }
     catch(err){
-        res.send("Error occured : ")
+        res.status(500).send("Error occured : ")
     }
 })
 
@@ -22,7 +22,7 @@ router.get('/:id',async(req,res)=>{
         res.json(pickups)
     }
     catch(err){
-        res.send('error')
+        res.status(500).send('error')
     }
 });
 
@@ -33,7 +33,7 @@ router.post('/add',async(req,res)=>{
         res.json(xyz)
     }
     catch(err){
-        res.send('error')
+        res.status(500).send('error')
     }
 })
 

@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 
+
 const pickUpSchema= new mongoose.Schema({
     line:{
         type : String,
@@ -7,14 +8,14 @@ const pickUpSchema= new mongoose.Schema({
     },
     effectiveness:{
         type: String,
-        // required : true
+        required : true
     },
-    category:{
+    context:{
         type :String,
-        // required : true
+        required : true
     }
 })
 
-const pickup = mongoose.model('pickup',pickUpSchema);
+const pickup = mongoose.model('pickups',pickUpSchema);
 
 module.exports = pickup

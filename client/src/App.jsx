@@ -2,32 +2,21 @@ import Navebar from './components/Navebar'
 import Home from './components/Home'
 import Footer from './components/Footer'
 import './App.css'
-import { useEffect, useState } from 'react'
-import Display from './components/Display'
+
 import { Route,Link,Routes } from 'react-router-dom'
+import DataCenter from './components/DataCenter'
+
 
 function App() {
-
-  const [data,setData]= useState([]);
-
-  useEffect(()=>{
-    fetch('https://s59-situational-comebacks.onrender.com/api/pickups')
-    .then(res=>res.json())
-    .then(res=>{
-      setData(res)
-    })
-    .catch(err=>{
-      console.log(err)
-    })
-  },[])
-
 
   return (
     <div>
       <Navebar/>
       <Routes>
-        <Route path='/' element={<Link to={'/pickups'}><Home  /></Link>} />
-        <Route path='/pickups' element={<Display pro={data}/>} />
+        <Route path='/' element={<Home/>} />
+        <Route path='/pickups' element={<DataCenter stack={{code : 'pickups'}}/>} />
+        <Route path='/standups' element={<DataCenter stack={{code : 'standups'}}/>} />
+        <Route path='/familys' element={<DataCenter stack={{code : 'familys'}}/>} />
       </Routes>
       <Footer/>
     </div>

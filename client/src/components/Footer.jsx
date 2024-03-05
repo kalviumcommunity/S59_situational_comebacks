@@ -1,4 +1,6 @@
 import React from 'react'
+import linked from '../assets/linkedIn.png'
+import github from '../assets/githunLogo1.png'
 
 function Footer() {
   return (
@@ -7,8 +9,12 @@ function Footer() {
             Made By :- Satyam
         </div>
         <div className='flex justify-center items-center'>
-            <img className='w-10 sm:w-10' src=".\src\assets\githunLogo1.png" alt="" />
-            <img className='w-10 sm:w-10' src=".\src\assets\linkedIn.png" alt="" />
+          <a href="https://github.com/Satyamsharmahp36" target='blank'>
+            <img className='w-10 sm:w-10 hover:scale-110 transform transition' src={github} alt="" />
+          </a>
+          <a href="https://www.linkedin.com/in/satyam-sharma-a21041289/" target='blank'>
+            <img className='w-10 sm:w-10 hover:scale-110 transform transition' src={linked} alt="" />
+          </a>
         </div>
     </div>
   )

@@ -1,16 +1,22 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
+import Img from '../assets/logo.png'
+
 
 function Navebar() {
   return (
     <div>
         <nav className="flex justify-between p-1 items-center">
         <div className="flex justify-center flex-col items-center md:flex-row">
-            <img src=".\src\assets\logo.png" alt="logo" className="p-1 w-24 sm:w-44 lg:w-48 rounded-xl"/>
+          <Link to='/'>
+            <img src={Img} alt="logo" className="p-1 hover:scale-110 transform transition w-12 sm:w-44 lg:w-32 rounded-xl"/>
+        </Link>
+
         </div>
         <div className='text-white flex items-center justify-between font-serif font-thin text-xs lg:text-2xl lg:p-6 sm:text-xl sm:p-2 '>
-            <h3 className='p-1 sm:p-2 '>About</h3>
-            <h3 className='p-1 sm:p-2 '>Contact</h3>
-            <h3 className='p-1 sm:p-2 '>Fav&#129293;</h3>
+            <h3 className='p-1 sm:p-2 hover:scale-110 transform transition '>About</h3>
+            <h3 className='p-1 sm:p-2 hover:scale-110 transform transition '>Contact</h3>
+            <h3 className='p-1 sm:p-2 hover:scale-110 transform transition '>Fav&#129293;</h3>
         </div>
         </nav>
     </div>

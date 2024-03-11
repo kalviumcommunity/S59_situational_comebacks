@@ -33,14 +33,14 @@ function UpdateDataForm({ selectedID, initialFormData, onCloseForm }) {
             }
         };
         fetchData();
-    }, [apiUrlb, selectedID]);
+    }, [selectedID]);
 
     useEffect(() => {
         
         if (initialFormData) {
             setFormData(initialFormData);
         }
-    }, [initialFormData]);
+    }, []);
 
     const handleSubmit = async (e) => {
         e.preventDefault();

@@ -15,8 +15,7 @@ function DeleteData({ selectedID ,onDelete }) {
         method: 'DELETE',
       });
       if (response.ok) {
-        toast.success("Deleted Succesfully , Click Refresh To See Changes")
-        onDelete()
+        toast.success("Deleted Succesfully")
       } else {
         toast.info("Failed To Delete Data !")
       }

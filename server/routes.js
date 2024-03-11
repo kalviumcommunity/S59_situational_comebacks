@@ -5,6 +5,7 @@ const family = require('./modals/family')
 const pickup = require('./modals/pickup')
 const standup = require('./modals/standup')
 const post=require('./modals/post')
+const schema = require('./joiSchema')
 connectDB()
 
 
@@ -36,6 +37,10 @@ router.get('/posts', async(req, res) => {
 router.post('/:collection', async (req, res) => {
     const collectionName = req.params.collection;
     try {
+        const {error} =schema.validate(req.body)
+        if(error){
+            res.json({error:"Please return proper data"})
+        }
         
         let collectionModel;
         switch (collectionName) {
@@ -63,6 +68,10 @@ router.post('/:collection', async (req, res) => {
 router.put('/:collection/:id', async (req, res) => {
     const collectionName = req.params.collection;
     try {
+        const {error} =schema.validate(req.body)
+        if(error){
+            res.json({error:"Please return proper data"})
+        }
         
         let collectionModel;
         switch (collectionName) {

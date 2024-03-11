@@ -121,11 +121,11 @@ function Display(props) {
         }, 5000); 
     };
 
-    const toggleDelete = () => {
-        setTimeout(() => {
-            setDeleteit(!Deletit);
-        }, 5000);
-    };
+    // const toggleDelete = () => {
+    //     setTimeout(() => {
+    //         setDeleteit(!Deletit);
+    //     }, 5000);
+    // };
 
     const closeDel = () => {
         setDeleteit(false);
@@ -140,6 +140,14 @@ function Display(props) {
         setDeleteInProgress(false);
     };
 
+    const closeF=()=>{
+        setDisplayForm(false)
+    }
+
+    const closeUpd=()=>{
+        setShowPost(!showPPost)
+    }
+
     return (
         <div className="bg-black h-full pb-10">
             <div className="w-full flex items-center justify-center">
@@ -151,10 +159,10 @@ function Display(props) {
             </div>
 
             <div className="flex justify-between  items-center relative">
-                <button onClick={() => shForm()} className="m-2 p-2 bg-slate-600 text-white rounded">
+                <button onClick={() => shForm()} className="m-2 p-2 bg-slate-600 hover:bg-white hover:scale-110 hover:text-black text-white rounded">
                     {displayForm ? <p>Go Back</p> : <p>Contribute</p>}
                 </button>
-                <button onClick={toggleDropdown} className="m-2 p-2 bg-slate-600 absolute right-0 text-white rounded">
+                <button onClick={toggleDropdown} className="m-2 p-2 bg-slate-600 absolute right-0  hover:bg-white hover:scale-110 hover:text-black text-white rounded">
                     {intensityLabel}
                 </button>
                 {isDropdownOpen && (
@@ -180,23 +188,27 @@ function Display(props) {
                     )}
                 </div>
 
-                <button className="m-2 fixed top-28  sm:top-24 xl:top-44 xl:left-4 xl:font-semibold   xl:p-1 z-50 left-0 text-sm p-0.5  bg-white text-black rounded" onClick={handleRefresh}>Refresh</button>
+                {/* <button className="m-2 fixed top-28  sm:top-24 xl:top-44 xl:left-4 xl:font-semibold   xl:p-1 z-50 left-0 text-sm p-0.5  bg-white text-black rounded" onClick={handleRefresh}>Refresh</button> */}
 
-                <div className="fixed z-20 top-52 sm:left-72 lg:left-80 lg:ml-4 xl:ml-52 xl:left-96 left-12">
+                <div className="fixed z-20 top-52 sm:left-72 lg:left-80 lg:ml-4 xl:ml-48 xl:left-96 left-12">
+                    {showPPost ? <button className="text-white font-semibold  bg-red-600  px-2 rounded-full absolute top-2 right-3" onClick={closeUpd}>X</button> :null}
+                
                     {showPPost ? <UpdateDataForm selectedID={OrgID} initialFormData={filteredData.find(item => item.user === selectedID)} onCloseForm={toggleUpdateForm} /> : null}
                 </div>
                 {Deletit ? (
-                    <div className="fixed z-50 top-64 sm:left-72 lg:left-80 lg:ml-4 xl:p-5 xl:ml-56 xl:left-96  bg-slate-600 p-2 rounded-xl flex items-center justify-center flex-col">
+                    <div className="fixed z-50 top-64 sm:left-72 lg:left-80 left-16 lg:ml-4 xl:p-5 xl:ml-64 xl:left-96  bg-slate-600 p-2 rounded-xl flex items-center justify-center flex-col">
                         <button className="text-white font-semibold  bg-red-600  px-2 rounded-full absolute top-2 right-3" onClick={closeDel}>X</button>
                         <h1 className="text-2xl text-white mb-2 mt-2 xl:text-4xl  font-semibold">Delete Post</h1>
                         <div className="flex items-center justify-center text-center flex-col">
                             <input type="text" placeholder="User ID" className="text-center font-semibold  rounded-xl" onChange={handleDel} />
-                            {DeletHandle ? <DeleteData selectedID={dID} onDelete={toggleDelete} onComplete={handleDeleteComplete} /> : <div className="text-black"><p className="text-black mt-2 p-1 rounded-xl bg-yellow-500">Verify Your ID</p></div>}
+                            {DeletHandle ? <DeleteData selectedID={dID}  onComplete={handleDeleteComplete} /> : <div className="text-black"><p className="text-black mt-2 p-1 rounded-xl bg-yellow-500">Verify Your ID</p></div>}
                         </div>
                     </div>
                 ) : null}
             </div>
             <div className="fixed z-10 top-52 sm:left-72 lg:left-80 lg:ml-4 xl:ml-64 left-16">
+            {displayForm? <button className="text-white font-semibold  bg-red-600  px-2 rounded-full absolute top-2 right-3" onClick={closeF}>X</button> :null}
+           
                 {displayForm ? <AddDataForm /> : null}
             </div>
 

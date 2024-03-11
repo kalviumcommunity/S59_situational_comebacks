@@ -12,12 +12,12 @@ function DataCenter({ stack }) {
             .then(res => res.json())
             .then(res => {
                 setData(res);
-                setLoading(false);
+                setLoading(false);  
             })
             .catch(err => {
                 toast.error("Error in Fetching");
             });
-    }, []);
+    }, [data]);
 
     return (
         <div>

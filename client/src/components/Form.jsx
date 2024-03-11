@@ -27,7 +27,7 @@ function AddDataForm() {
         body: JSON.stringify(formData)
       });
       if (response.ok) {
-        toast.success('Adition Done , Click Refresh To See Changes');
+        toast.success('Adition Done');
        
         // Reset form fields to empty
         setFormData({

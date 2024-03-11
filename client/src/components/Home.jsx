@@ -14,21 +14,21 @@ function Home() {
 
         <div className='flex justify-center items-center flex-col lg:flex-row'>
             <Link to='/familys'>
-            <div className='bg-gradient-to-tl hover:scale-110 transform transition from-lime-200 via-sky-500 to-violet-500 bg-zinc-200  rounded-xl flex items-center justify-around flex-col m-10 lg:w-96  shadow-lg shadow-cyan-500/50'>
+            <div className=' hover:scale-110 transform transition bg-gradient-to-l from-cyan-100 to-cyan-600  rounded-xl flex items-center justify-around flex-col m-10 lg:w-96  shadow-lg '>
                 <h1 className='text-3xl text-blue-900 font-bold p-2'>&#128153;Family&#128153;</h1>
                 <h4 className='text-xl text-cyan-900 font-semibold p-8 text-center'>Crack Jokes which make your whole family laugh</h4>
             </div>
             </Link>
 
             <Link to='/standups'>
-            <div className='bg-gradient-to-l hover:scale-110 transform transition from-gray-200 via-fuchsia-200 to-stone-100 m-10 rounded-xl flex items-center flex-col justify-around bg-cyan-500 shadow-lg shadow-cyan-500/50 lg:w-96'>
+            <div className='bg-gradient-to-l hover:scale-110 transform transition from-gray-200 via-fuchsia-200 to-stone-400 m-10 rounded-xl flex items-center flex-col justify-around bg-cyan-500 shadow-lg lg:w-96'>
                 <h1 className='text-3xl text-blue-900 font-bold p-2'>&#129293;Friends&#129293;</h1>
                 <h4 className='text-xl text-cyan-800 font-semibold p-8 text-center'>If you want to Roast or do standup in front of friends </h4>
             </div>
             </Link>
 
             <Link to='/pickups'>
-            <div className='bg-gradient-to-t hover:scale-110 transform transition rounded-xl flex flex-col lg:w-96 items-center justify-between from-red-700 via-rose-600 to-pink-500 m-10 bg-cyan-500 shadow-lg shadow-cyan-500/50'>
+            <div className='bg-gradient-to-l hover:scale-110 transform transition rounded-xl flex flex-col lg:w-96 items-center justify-between from-red-700 via-rose-600 to-pink-500 m-10 bg-cyan-500 shadow-lg '>
                 <h1 className='text-3xl  font-bold p-2'>&#10084;Lover&#10084;</h1>
                 <h4 className='text-xl text-cyan-100 font-semibold p-8 text-center'>Pickup lines , which make them mine</h4>
             </div>

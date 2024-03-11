@@ -4,6 +4,7 @@ const {connectDB} = require('./db')
 const family = require('./modals/family')
 const pickup = require('./modals/pickup')
 const standup = require('./modals/standup')
+const post=require('./modals/post')
 connectDB()
 
 
@@ -25,81 +26,99 @@ router.get('/familys',async(req,res)=>{
 })
 
 
+router.get('/posts', async(req, res) => {
+    const data = await family.find()
+    res.send(data)
+}); 
 
-// router.get("/",async(req,res)=>{
-//     try{
-//         const pickups = await pickup.find()
-//         res.json(pickups)
-//     }
-//     catch(err){
-//         res.status(500).send("Error occured : ")
-//     }
-// })
 
-// router.get('/:id',async(req,res)=>{
-//     try{
-//         const pickups = await pickup.findById(req.params.id)
-//         res.json(pickups)
-//     }
-//     catch(err){
-//         res.status(500).send('error')
-//     }
-// });
 
-// router.post('/add',async(req,res)=>{
-//     try{
-//         const pickups= new pickup(req.body)
-//         const xyz = await pickups.save()
-//         res.json(xyz)
-//     }
-//     catch(err){
-//         res.status(500).send('error')
-//     }
-// })
+router.post('/:collection', async (req, res) => {
+    const collectionName = req.params.collection;
+    try {
+        
+        let collectionModel;
+        switch (collectionName) {
+            case 'pickups':
+                collectionModel = pickup;
+                break;
+            case 'standups':
+                collectionModel = standup;
+                break;
+            case 'familys':
+                collectionModel = family;
+                break;
+            default:
+                return res.status(400).json({ error: 'Invalid collection name' });
+        }
+        
+        const newPost = new collectionModel(req.body);
+        const savedPost = await newPost.save();
+        res.status(201).json(savedPost);
+    } catch (error) {
+        res.status(400).json({ error: 'Failed to add data', "req.body": req.body });
+    }
+});
 
-// router.put('/:id',async(req,res)=>{
-//     try{
-//         const pickups = await pickup.findByIdAndUpdate(req.params.id, req.body,{new: true});
-//         if(!pickups){
-//             return res.status(404).send('Pickup Not Found');
-//         }
-//         else{
-//             res.json(pickups);
-//         }
-//     }
-//     catch(err){
-//         res.status(500).send("Error");
-//     }
-// });
+router.put('/:collection/:id', async (req, res) => {
+    const collectionName = req.params.collection;
+    try {
+        
+        let collectionModel;
+        switch (collectionName) {
+            case 'pickups':
+                collectionModel = pickup;
+                break;
+            case 'standups':
+                collectionModel = standup;
+                break;
+            case 'familys':
+                collectionModel = family;
+                break;
+            default:
+                return res.status(400).json({ error: 'Invalid collection name' });
+        }
+        
+        const updatedPost = await collectionModel.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        if (!updatedPost) {
+            return res.status(404).json({ error: 'Data not found' });
+        }
+        res.status(200).json(updatedPost);
+    } catch (error) {
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
 
-// router.patch('/:id',async (req,res)=>{
-//     try{
-//         const pickups = await pickup.findByIdAndUpdate(req.params.id, req.body,{new: true});
-//         if(!pickups){
-//             return res.status(404).send('Pickup Not Found');
-//         }
-//         else{
-//             res.json(pickups);
-//         }
-//     }
-//     catch(err){
-//         res.status(500).send("Error");
-//     }
-// })
 
-// router.delete('/:id',async (req,res)=>{
-//     try{
-//         const pickups= await pickup.findByIdAndDelete(req.params.id);
-//         if(!pickups){
-//             return res.status(404).send('Pickup not found');
-//         }
-//         res.send('Pickup deleted successfully');
-//     }
-//     catch(err){
-//         res.status(500).send('Error deleting pickup')
-//     }
-// })
+router.delete('/:collection/:id', async (req, res) => {
+    const collectionName = req.params.collection;
+    try {
+        let collectionModel;
+        switch (collectionName) {
+            case 'pickups':
+                collectionModel = pickup;
+                break;
+            case 'standups':
+                collectionModel = standup;
+                break;
+            case 'familys':
+                collectionModel = family;
+                break;
+            default:
+                return res.status(400).json({ error: 'Invalid collection name' });
+        }
+        const deletedPost = await collectionModel.findByIdAndDelete(req.params.id);
+        if (!deletedPost) {
+            return res.status(404).json({ error: 'Data not found' });
+        }
+        res.status(200).json({ message: 'Data deleted successfully' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
 
 
 
 module.exports=router;
+

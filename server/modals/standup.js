@@ -13,8 +13,13 @@ const standbySchema= new mongoose.Schema({
     context:{
         type :String,
         required : true
+    },
+    user:{
+        type :String,
+        required :true
     }
 })
+
 
 const standup = mongoose.model('standups',standbySchema);
 

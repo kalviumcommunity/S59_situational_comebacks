@@ -13,6 +13,10 @@ const pickUpSchema= new mongoose.Schema({
     context:{
         type :String,
         required : true
+    },
+    user:{
+        type :String,
+        required :true
     }
 })
 

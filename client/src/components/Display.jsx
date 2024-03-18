@@ -31,8 +31,6 @@ function Display(props) {
     const [showAtUserDivs, setShowAtUserDivs] = useState(false); 
     const [isOpen, setIsOpen] = useState(false);
     const [constri,setCountri]=useState(false)
-    
-
     const { userId } = useAuth(); 
 
     const handleSearchChanging = (searchTerm) => {
@@ -209,7 +207,7 @@ function Display(props) {
 
     const handleContribute = (userId, id) => {
         setEdit(true); 
-        setSelectedID(userId);
+        setSelectedID(id);
         setOrgID(id);
     };
 

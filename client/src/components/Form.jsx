@@ -97,7 +97,7 @@ function AddDataForm() {
           required
         />
         <button onClick={contriSection} className='inline-flex items-center p-2 text-sm font-medium text-center text-white bg-black-700 rounded-lg hover:bg-green-800 focus:ring-4 hover:scale-110 transform transition duration-y focus:outline-none focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800 mb-3' >
-          Colab Id
+          Collab Id
         </button>
         {chek && (
           <input

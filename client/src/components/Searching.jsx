@@ -3,11 +3,6 @@ import React, { useState } from 'react';
 
 function Searching(props) {
     const [search, setSearch] = useState('');
-    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-
-    const toggleDropdown = () => {
-        setIsDropdownOpen(!isDropdownOpen);
-    };
 
     const handleInput = (e) => {
         setSearch(e.target.value.toUpperCase());

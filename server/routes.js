@@ -4,10 +4,29 @@ const {connectDB} = require('./db')
 const family = require('./modals/family')
 const pickup = require('./modals/pickup')
 const standup = require('./modals/standup')
-const post=require('./modals/post')
-const schema = require('./joiSchema')
+const postes=require('./modals/post')
+const {schema} = require('./joiSchema')
+const jwt =require('jsonwebtoken')
+require('dotenv').config()
+
 connectDB()
 
+const authToken = (req, res, next) => {
+    const authHead = req.headers['authorization'];
+    const token = authHead && authHead.split(' ')[1];  
+    if(token == null){
+      return res.status(401).json({ error: "Unauthorized Access", message: "You are not authorized to access this resource." });
+    }
+    
+    jwt.verify(token, process.env.SECRET_KEY, (err, userId) => {
+      if(err){
+        return res.status(403).json({ error: "Forbidden", message: "Access forbidden. Please login again." });
+      }
+      req.userId = userId;
+
+     next();
+  });
+  }
 
 
 router.get('/pickups',async(req,res)=>{
@@ -28,18 +47,17 @@ router.get('/familys',async(req,res)=>{
 
 
 router.get('/posts', async(req, res) => {
-    const data = await family.find()
+    const data = await postes.find()
     res.send(data)
 }); 
 
 
-
-router.post('/:collection', async (req, res) => {
+router.post('/:collection',authToken, async (req, res) => {
     const collectionName = req.params.collection;
     try {
         const {error} =schema.validate(req.body)
         if(error){
-            res.json({error:"Please return proper data"})
+          return res.status(400).json(error)
         }
         
         let collectionModel;
@@ -60,18 +78,14 @@ router.post('/:collection', async (req, res) => {
         const newPost = new collectionModel(req.body);
         const savedPost = await newPost.save();
         res.status(201).json(savedPost);
-    } catch (error) {
-        res.status(400).json({ error: 'Failed to add data', "req.body": req.body });
+    } catch (err) {
+        res.status(400).json({ "error":"Error"});
     }
 });
 
-router.put('/:collection/:id', async (req, res) => {
+router.put('/:collection/:id',authToken, async (req, res) => {
     const collectionName = req.params.collection;
     try {
-        const {error} =schema.validate(req.body)
-        if(error){
-            res.json({error:"Please return proper data"})
-        }
         
         let collectionModel;
         switch (collectionName) {
@@ -99,7 +113,7 @@ router.put('/:collection/:id', async (req, res) => {
 });
 
 
-router.delete('/:collection/:id', async (req, res) => {
+router.delete('/:collection/:id',authToken, async (req, res) => {
     const collectionName = req.params.collection;
     try {
         let collectionModel;

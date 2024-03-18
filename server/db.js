@@ -20,7 +20,7 @@ const disconnectDB = async()=>{
 const checkConnected=()=>{
     return mongoose.connection.readyState===1 ; 
 }
-// this function will return true or false on bases of if databases is connected or not 
+
 
 module.exports={
     connectDB,

@@ -1,11 +1,17 @@
-const joi = require('joi')
+const Joi = require('joi')
 
-const schema=joi.object({
-    line: joi.string().required(),
-    effectiveness : joi.string().required(),
-    context: joi.string().required(),
-    user: joi.string().required()
+const schema = Joi.object({
+    line: Joi.string(),
+    effectiveness : Joi.string(),
+    context: Joi.string(),
+    user: Joi.string()
 })
 
+const validatePost=(data)=>{
+    return schema.validate(data,{abortEarly:false})
+}
 
-module.exports = {schema}
+module.exports = {
+    schema,
+    validatePost,
+}

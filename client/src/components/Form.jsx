@@ -1,52 +1,64 @@
-
 import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useAuth } from './Authcontext';
 
 function AddDataForm() {
+  const { token, userId } = useAuth();
   const location = useLocation();
   const [formData, setFormData] = useState({
     line: '',
     effectiveness: '',
     context: '',
-    user: ''
+    user: userId
   });
+  const [chek, setChek] = useState(false);
+  const [contriId, setContriId] = useState('');
 
-  // Determine the API endpoint based on the current route
-  const apiUrl = `http://localhost:3000/api/${location.pathname}`;
+  const apiUrl = `http://localhost:3000/api${location.pathname}`;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      const dataToSend = {
+        ...formData,
+        user: chek ? contriId : userId 
+      };
+
       const response = await fetch(apiUrl, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(dataToSend)
       });
+
       if (response.ok) {
-        toast.success('Adition Done');
-       
-        // Reset form fields to empty
+        toast.success('Addition Done');
         setFormData({
           line: '',
           effectiveness: '',
           context: '',
-          user: ''
+          user: userId
         });
+        setContriId('');
+        setChek(false);
       } else {
-        toast.info('Failed to add');
+        toast.info('Login to Add Data');
       }
     } catch (error) {
       toast.error('Error occurred');
-    
     }
   };
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const contriSection = () => {
+    setChek(!chek);
   };
 
   return (
@@ -84,18 +96,24 @@ function AddDataForm() {
           onChange={handleChange}
           required
         />
-        <input
-          type='text'
-          name='user'
-          placeholder='UserID'
-          value={formData.user}
-          className='text-black font-bold text-center rounded-2xl my-2 '
-          onChange={handleChange}
-          required
-        />
+        <button onClick={contriSection} className='inline-flex items-center p-2 text-sm font-medium text-center text-white bg-black-700 rounded-lg hover:bg-green-800 focus:ring-4 hover:scale-110 transform transition duration-y focus:outline-none focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800 mb-3' >
+          Colab Id
+        </button>
+        {chek && (
+          <input
+            type="text"
+            placeholder='Contribution ID'
+            value={contriId}
+            onChange={(e) => setContriId(e.target.value)}
+            pattern="@[a-zA-Z0-9]{6,}"
+            title="Contribution ID should start with @ and have a minimum of 6 characters"
+            required
+            className='rounded-xl text-center font-bold'
+          />
+        )}
         <button
           type='submit'
-          className='inline-flex items-center p-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 hover:scale-110 transform transition duration-y focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
+          className='inline-flex mt-2 items-center p-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 hover:scale-110 transform transition duration-y focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
         >
           Add Data
         </button>
@@ -105,4 +123,3 @@ function AddDataForm() {
 }
 
 export default AddDataForm;
-

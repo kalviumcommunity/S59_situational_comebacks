@@ -1,24 +1,40 @@
 const mongoose = require('mongoose');
+const crypto =require('crypto')
 
 
 const postSchema= new mongoose.Schema({
-    line:{
-        type : String
-        
+    userName:{
+        type : String,
+        required :true
     },
-    effectiveness:{
-        type: String
-        
+    emailId:{
+        type: String,
+        required :true
     },
-    context:{
-        type :String
-    },
-    user:{
+    userId:{
         type :String,
         required :true
+    },
+    password:{
+        salt: String,
+        hash:String
     }
 })
 
-const postup = mongoose.model('posts',postSchema);
+postSchema.methods.setPassword = function (password) {
+    this.password.salt = crypto.randomBytes(16).toString('hex');
+    this.password.hash = crypto
+      .pbkdf2Sync(password, this.password.salt, 1000, 64, 'sha512')
+      .toString('hex');
+  };
+  
+  postSchema.methods.validatePassword = function (password) {
+    const hash = crypto
+      .pbkdf2Sync(password, this.password.salt, 1000, 64, 'sha512')
+      .toString('hex');
+    return this.password.hash === hash;
+  };
+
+  const postup = mongoose.model('authusers', postSchema);
 
 module.exports = postup

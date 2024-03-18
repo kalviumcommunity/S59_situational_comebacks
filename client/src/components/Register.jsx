@@ -1,179 +1,262 @@
-import { useState,useEffect,useRef } from "react";
-import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
-
-// making our form with the help of useForm method
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import Img from "../assets/RegLogo.png";
+import 'react-toastify/dist/ReactToastify.css';
+import { toast, ToastContainer } from "react-toastify";
 
 function Register() {
-  // using some properties of use form like , "formstate error handling" and getVlaues to approch the values of input field
-  const {register,handleSubmit,formState: { errors },getValues} = useForm();  
+  const [username, setUsername] = useState("");
+  const [userID, setUserID] = useState("");
+  const [userEmail, setUserEmail] = useState("");
+  const [userPass, setUserPass] = useState("");
+  const [confirmPass, setConfirmPass] = useState("");
   const [submit, setSubmit] = useState(false);
-  // useing state to save the response
-  const [save,setSave]=useState([]);
+  const [counter, setCounter] = useState(3);
   const navigate = useNavigate();
 
-  const linkRef = useRef(null);
+  const [nameError, setNameError] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [userIdError, setUserIdError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [confirmPasswordError, setConfirmPasswordError] = useState("");
 
-  // this state is used to make a reverse counter
-  const [counter, setCounter] = useState(3);
+  const handleLogin = async (e) => {
+    e.preventDefault();
 
-  //this function will help to identify that wether the password and comfirm password field have same values or not
-  const validateConfirmPassword = (value) => {
-    const passwordValue = getValues("password"); 
-    return value === passwordValue || "Passwords do not match";
+    const namePattern = /\S+/;
+    if (!namePattern.test(username)) {
+      setNameError("Name cannot be empty");
+      return;
+    } else {
+      setNameError("");
+    }
+
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(userEmail)) {
+      setEmailError("Invalid email format");
+      return;
+    } else {
+      setEmailError("");
+    }
+
+    const userIdPattern = /^(?!@)(?=.*\d)[^\s]{6,}$/;
+
+    if (!userIdPattern.test(userID)) {
+      setUserIdError("User must contain at least 6 characters including one number , it should not start with @ and EmptySpace not allowed");
+      return;
+    } else {
+      setUserIdError("");
+    }
+
+    const passwordPattern = /^(?!.*\s)(?=.*[a-zA-Z0-9])(?=.*[\W_]).{6,}$/;
+    if (!passwordPattern.test(userPass)) {
+      setPasswordError("Password must contain at least 6 characters including one special character and space not allowed.");
+      return;
+    } else {
+      setPasswordError("");
+    }
+
+    if (userPass !== confirmPass) {
+      setConfirmPasswordError("Passwords do not match");
+      return;
+    } else {
+      setConfirmPasswordError("");
+    }
+
+    try {
+      const response = await fetch("http://localhost:3000/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userName: username,
+          emailId: userEmail,
+          userId: userID,
+          password: userPass,
+        }),
+      });
+
+      if (response.ok) {
+        setSubmit(true);
+        toast.success("Registration done");
+      } else {
+        toast.error("User with same Email Id or User Id Already Exists");
+      }
+    } catch (err) {
+      toast.error("Some Error Occurred");
+    }
   };
 
-  // fuction to change state when we do submit and also saving it in state
-
-  function doneSubmit(data) {
-    setSave(data)
-    setSubmit(true);
-  }
-
-function goback(){
-  return(
-  <Link to='/'></Link>
-  )
-}
-
-  // function to redirect us too the main page automatically after 3 sec 
-
   useEffect(() => {
-    if (submit && Object.keys(errors).length === 0) {
-      setTimeout(() => {
-        linkRef.current.click();
-      }, 3000);
-    }
-  }, [submit, errors]);
-
-
-  useEffect(() => {
-    if (submit && Object.keys(errors).length === 0) {
+    if (submit) {
       const timer = setInterval(() => {
-              setCounter((prev) => prev - 1); // decrement the coounter timer every second
-            }, 1000);
-            setTimeout(() => {
-              navigate("/"); 
-            }, 3000);  
-            return () => clearInterval(timer);
+        setCounter((prev) => prev - 1);
+      }, 1000);
+      setTimeout(() => {
+        navigate("/login");
+      }, 3000);
+      return () => clearInterval(timer);
     }
-  }, [submit, errors, navigate]);
-
-  // here we are finding the length of error obj as if it's emplty only in that case we will show registration sucessful
-  const objectLength = Object.keys(errors).length;
+  }, [submit, navigate]);
 
   return (
-    <div>
-      {/* this button changes the url nad navigate us to home */}
-
+    <section className="bg-gray-50 dark:bg-black lg:pb-24 pb-10">
       <div className="flex items-center justify-center">
-        {submit && objectLength === 0 ? (
-          <h1 className="text-3xl font-semibold text-center text-white">
-            Registration Successful <br />
-            <span className="text-center text-sm">"You will be redirected to Home page in {counter}"</span>  
-          </h1>
+        {submit ? (
+          <div className="fixed z-20 top-48 lg:top-64 lg:py-12 lg:px-5 bg-blue-700 px-1 py-10 rounded-2xl">
+            <h1 className="text-3xl lg:text-5xl font-semibold text-center text-white mb-5">
+              Registration <br /> Successful
+            </h1>
+            <span className="text-center text-white ">
+              You will be redirected to Login page in{" "}
+              <span className="text-xl text-blue-100">{counter}</span>{" "}
+            </span>
+          </div>
         ) : null}
       </div>
-
-      <div className="p-5  flex items-center justify-center  w-full">
-        {/* in this form we have used different condition and when anything is not fullfilled then we add and error to that key */}
-        <form
-          onSubmit={handleSubmit(doneSubmit)}
-          className="px-8 md:scale-105 pt-5 pb-8 mb-4 m-16  mt-5 max-w-sm  bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 md:hover:scale-115 hover:scale-110  transform transition duration-y bg-opacity-10"
-
-        >
-          <h1 className="text-center font-semibold text-2xl text-white pb-8">
-            Register Here
-          </h1>
-
-          {/* in this input we want input first and also it shoud be between 3 to 30 words  */}
-          <input
-            type="text"
-            placeholder="First Name"
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight 
-        focus:outline-none focus:shadow-outline text-center mt-4"
-            {...register("firstName", {
-              required: "Enter The Name",
-              minLength: {
-                value: 3,
-                message: "Name should be of minimum 3 words",
-              },
-              maxLength: {
-                value: 30,
-                message: "Name should be of maximum 30 words",
-              },
-            })}
+      <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
+        <Link
+          to="/"
+          className="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white">
+          <img
+            src={Img}
+            alt="logo"
+            className="m-3 hover:scale-110 w-36 sm:w-44 lg:w-56 rounded-xl"
           />
-          <br />
-          {/* when conditin didn't fullfil then we throw error below it */}
-
-          <h1 className="text-center mt-1">{errors.firstName?.message}</h1>
-
-
-            {/* /here in the input text thing we are using regex to validate the pattenrn of email */}
-          <input
-            type="email"
-            placeholder="Email ID"
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight 
-        focus:outline-none focus:shadow-outline text-center mt-4"
-            {...register("email", {
-              required: "Enter The Email",
-              pattern: { value: /^\S+@\S+$/i, message: "Invalid email" },
-            })}
-          />
-          <br />
-          <h1 className="text-center mt-1">{errors.email?.message}</h1>
-
-            {/* here we are adding errors then size to password is less than 10 and when it didn't have any special char which is checked bt regex */}
-          <input
-            type="password"
-            placeholder="Enter Password"
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight 
-        focus:outline-none focus:shadow-outline text-center mt-4"
-            {...register("password", {
-              required: "Enter The Password",
-              minLength: {
-                value: 10,
-                message: "Password should be of minimum 10 digits",
-              },
-              pattern: {
-                    // patten of special keyword in password
-                value: /[!@#$%^&*()_+{}|:"<>?/\[\];',.\\]/,
-                message: "Password Should have a special character",
-              },
-            })}
-          />
-          <br />
-          <h1 className="text-center">{errors.password?.message}</h1>
-
-            {/* here we call our validate function which will compare it input with password field */}
-          <input
-            type="password"
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight 
-        focus:outline-none focus:shadow-outline text-center mt-4"
-            placeholder="Confirm Password"
-            {...register("confirm", {
-              required: "Confirm the Password",
-              validate: validateConfirmPassword,
-            })}
-          />
-          <br />
-          <h1 className="text-center">{errors.confirm?.message}</h1>
-
-          {/* at last this submit button will lead to call the donesubmit function which chage our state */}
-          <div className="flex items-center justify-center">
-            <button
-              type="submit"
-              className="bg-white mt-5 hover:bg-blue-500 text-black-700 font-semibold hover:text-white
-              p-1 border border-blue-500 hover:border-transparent rounded "
-            >
-              Submit
-            </button>
+        </Link>
+        <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
+          <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
+            <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
+              Create an account
+            </h1>
+            <form className="space-y-4 md:space-y-6">
+              <div>
+                <label
+                  htmlFor="Uname"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  Your Name
+                </label>
+                <input
+                  type="text"
+                  name="Uname"
+                  onChange={(e) => setUsername(e.target.value)}
+                  id="Uname"
+                  className={`bg-gray-50 border text-center border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 ${
+                    nameError ? "border-red-500" : ""
+                  }`}
+                  placeholder="Bhupinder Jogi"
+                  required
+                />
+                {nameError && (
+                  <p className="text-red-500 text-center hover:scale-110 font-semibold  text-xs mt-1">{nameError}</p>
+                )}
+              </div>
+              <div>
+                <label
+                  htmlFor="email"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  Your email
+                </label>
+                <input
+                  type="email"
+                  name="email"
+                  id="email"
+                  onChange={(e) => setUserEmail(e.target.value)}
+                  className={`bg-gray-50 border text-center border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 ${
+                    emailError ? "border-red-500" : ""
+                  }`}
+                  placeholder="user@company.com"
+                  required
+                />
+                {emailError && (
+                  <p className="text-red-500 text-center hover:scale-110 font-semibold  text-xs mt-1">{emailError}</p>
+                )}
+              </div>
+              <div>
+                <label
+                  htmlFor="userId"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  User Id
+                </label>
+                <input
+                  type="text"
+                  name="userId"
+                  id="userId"
+                  onChange={(e) => setUserID(e.target.value)}
+                  className={`bg-gray-50 border  border-gray-300 text-center text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 ${
+                    userIdError ? "border-red-500" : ""
+                  }`}
+                  placeholder="User ID"
+                  required
+                />
+                {userIdError && (
+                  <p className="text-red-500 text-center hover:scale-110 font-semibold  text-xs mt-1">{userIdError}</p>
+                )}
+              </div>
+              <div>
+                <label
+                  htmlFor="password"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  Password
+                </label>
+                <input
+                  type="password"
+                  name="password"
+                  id="password"
+                  onChange={(e) => setUserPass(e.target.value)}
+                  className={`bg-gray-50 text-center border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 ${
+                    passwordError ? "border-red-500" : ""
+                  }`}
+                  placeholder="Password"
+                  required
+                />
+                {passwordError && (
+                  <p className="text-red-500 text-xs text-center hover:scale-110 font-semibold mt-1">{passwordError}</p>
+                )}
+              </div>
+              <div>
+                <label
+                  htmlFor="confirm-password"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  Confirm password
+                </label>
+                <input
+                  type="password"
+                  name="confirm-password"
+                  id="confirm-password"
+                  value={confirmPass}
+                  onChange={(e) => setConfirmPass(e.target.value)}
+                  className={`bg-gray-50 text-center border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 ${
+                    confirmPasswordError ? "border-red-500" : ""
+                  }`}
+                  placeholder="Confirm Password"
+                  required
+                />
+                {confirmPasswordError && (
+                  <p className="text-red-500 text-center hover:scale-110 font-semibold text-xs mt-1">
+                    {confirmPasswordError}
+                  </p>
+                )}
+              </div>
+              <button
+                type="submit"
+                className="w-full text-white bg-blue-600 hover:bg-white hover:text-black hover:scale-105 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                onClick={handleLogin}
+              >
+                Register
+              </button>
+            </form>
           </div>
-        </form>
+        </div>
       </div>
-    </div>
+      <ToastContainer />
+    </section>
   );
 }
 

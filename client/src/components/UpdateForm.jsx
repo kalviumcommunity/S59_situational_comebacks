@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { toast, ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css'
+import { useAuth } from './Authcontext';
 
 function UpdateDataForm({ selectedID, initialFormData, onCloseForm }) {
     const location = useLocation();
@@ -13,6 +14,7 @@ function UpdateDataForm({ selectedID, initialFormData, onCloseForm }) {
     });
 
     const [showForm, setShowForm] = useState(true);
+    const { token, setToken } = useAuth();
 
 
     const apiUrl = `http://localhost:3000/api${location.pathname}/${selectedID}`;
@@ -48,15 +50,16 @@ function UpdateDataForm({ selectedID, initialFormData, onCloseForm }) {
             const response = await fetch(apiUrl, {
                 method: 'PUT',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
                 },
                 body: JSON.stringify(formData)
             });
             if (response.ok) {
-                toast.success("Data Updated Successfully , Click Refresh To See Changes");
+                toast.success("Data Updated Successfully");
                 onCloseForm();
             } else {
-                toast.info("Failed to Update data")
+                toast.info('Login to Add Data');
             }
         } catch (error) {
             toast.error("Error Occurred")

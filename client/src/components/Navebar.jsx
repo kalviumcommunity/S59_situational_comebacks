@@ -10,7 +10,7 @@ function Navebar(props) {
         <nav className="flex justify-between p-1 items-center">
         <div className="flex justify-center flex-col items-center md:flex-row">
           <Link to='/'>
-            <img src={Img} alt="logo" className="m-3 hover:scale-110 transform transition w-12 sm:w-44 lg:w-32 rounded-xl"/>
+            <img src={Img} alt="logo" className="m-3 hover:scale-110 transform transition w-12 sm:w-44 lg:w-32 sm:rounded-xl rounded-sm"/>
         </Link>
         </div>
         <div className='text-white flex items-center justify-between font-serif font-thin text-xs lg:text-2xl lg:p-6 sm:text-xl sm:p-2 '>

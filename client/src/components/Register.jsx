@@ -125,7 +125,7 @@ function Register() {
 
 
   return (
-    <section className="bg-gray-50 dark:bg-black lg:pb-24 pb-10">
+    <section className="bg-black dark:bg-black lg:pb-24 pb-10">
        {showOtpInput && (
         <div className="fixed z-20 inset-0 flex items-center justify-center overflow-x-hidden overflow-y-auto outline-none focus:outline-none">
           <div className="relative w-auto max-w-3xl mx-auto my-6">

@@ -125,10 +125,6 @@ function Display(props) {
         setDisplayForm(!displayForm);
     };
 
-    const handleRefresh = () => {
-        window.location.reload(); 
-    };
-
     const closeVer = () => {
         setEdit(false);
         setIdmatch(false);
@@ -325,6 +321,7 @@ const resetFilters = () => {
                     </div>
                 ) : null}
             </div>
+            
             <div className="fixed z-10 top-52 sm:left-72 lg:left-80 lg:ml-4 xl:ml-64 left-12">
             {displayForm? <button className="text-white font-semibold  bg-red-600  px-2 rounded-full absolute top-2 right-3" onClick={closeF}>X</button> :null}
            

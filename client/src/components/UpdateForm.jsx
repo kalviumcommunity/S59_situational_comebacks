@@ -17,8 +17,8 @@ function UpdateDataForm({ selectedID, initialFormData, onCloseForm }) {
     const { token, setToken } = useAuth();
 
 
-    const apiUrl = `http://localhost:3000/api${location.pathname}/${selectedID}`;
-    const apiUrlb = `http://localhost:3000/api${location.pathname}`;
+    const apiUrl = `${import.meta.env.VITE_URL}/api${location.pathname}/${selectedID}`;
+    const apiUrlb = `${import.meta.env.VITE_URL}/api${location.pathname}`;
 
     useEffect(() => {
         const fetchData = async () => {

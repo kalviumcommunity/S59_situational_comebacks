@@ -8,7 +8,7 @@ function DataCenter({ stack }) {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        fetch(`http://localhost:3000/api/${stack.code}`)
+        fetch(`${import.meta.env.VITE_URL}/api/${stack.code}`)
             .then(res => res.json())
             .then(res => {
                 setData(res);

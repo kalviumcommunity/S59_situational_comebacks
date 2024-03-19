@@ -10,7 +10,7 @@ function DeleteData({ selectedID ,onComplete }) {
   const { token} = useAuth();
 
   // Determine the API endpoint based on the current route and the selected ID
-  const apiUrl = `http://localhost:3000/api${location.pathname}/${selectedID}`;
+  const apiUrl = `${import.meta.env.VITE_URL}/api${location.pathname}/${selectedID}`;
 
   const handleDelete = async () => {
     try {

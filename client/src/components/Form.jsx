@@ -16,7 +16,7 @@ function AddDataForm() {
   const [chek, setChek] = useState(false);
   const [contriId, setContriId] = useState('');
 
-  const apiUrl = `http://localhost:3000/api${location.pathname}`;
+  const apiUrl = `${import.meta.env.VITE_URL}/api${location.pathname}`;
 
   const handleSubmit = async (e) => {
     e.preventDefault();

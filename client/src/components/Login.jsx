@@ -11,7 +11,7 @@ const LoginForm = (props) => {
   const [submitted, setSubmitted] = useState(false);
   const navigate = useNavigate();
   const [counter, setCounter] = useState(3);
-  const API_URI = 'http://localhost:3000/auth/login';
+  const API_URI = `${import.meta.env.VITE_URL}/auth/login`;
 
   useEffect(() => {
     if (submitted) {

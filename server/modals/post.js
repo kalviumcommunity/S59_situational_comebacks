@@ -18,7 +18,10 @@ const postSchema= new mongoose.Schema({
     password:{
         salt: String,
         hash:String
-    }
+    },
+    otp: {
+      type: String
+  }
 })
 
 postSchema.methods.setPassword = function (password) {

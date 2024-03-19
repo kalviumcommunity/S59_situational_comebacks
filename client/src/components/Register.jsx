@@ -13,7 +13,8 @@ function Register() {
   const [submit, setSubmit] = useState(false);
   const [counter, setCounter] = useState(3);
   const navigate = useNavigate();
-
+  const [otp, setOtp] = useState("");
+  const [showOtpInput, setShowOtpInput] = useState(false);
   const [nameError, setNameError] = useState("");
   const [emailError, setEmailError] = useState("");
   const [userIdError, setUserIdError] = useState("");
@@ -78,30 +79,95 @@ function Register() {
       });
 
       if (response.ok) {
-        setSubmit(true);
-        toast.success("Registration done");
+        setShowOtpInput(true);
+        toast.success("OTP sent to your email. Please check your inbox.");
       } else {
-        toast.error("User with same Email Id or User Id Already Exists");
+        toast.error("User with the same Email ID or User ID already exists.");
       }
     } catch (err) {
-      toast.error("Some Error Occurred");
+      toast.error("Some error occurred.");
     }
   };
 
-  useEffect(() => {
-    if (submit) {
-      const timer = setInterval(() => {
-        setCounter((prev) => prev - 1);
-      }, 1000);
-      setTimeout(() => {
-        navigate("/login");
-      }, 3000);
-      return () => clearInterval(timer);
+  const handleOtpVerification = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await fetch("http://localhost:3000/auth/verify-otp", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          emailId: userEmail,
+          otp: otp,
+        }),
+      });
+
+      if (response.ok) {
+        setSubmit(true);
+        toast.success("Registration successful. You can now login.");
+        const timer = setInterval(() => {
+          setCounter((prev) => prev - 1);
+        }, 1000);
+        setTimeout(() => {
+          navigate("/login");
+        }, 3000);
+        return () => clearInterval(timer);
+    
+      } else {
+        toast.error("Invalid OTP. Please enter the correct OTP.");
+      }
+    } catch (err) {
+      toast.error("Some error occurred.");
     }
-  }, [submit, navigate]);
+  };
+
 
   return (
     <section className="bg-gray-50 dark:bg-black lg:pb-24 pb-10">
+       {showOtpInput && (
+        <div className="fixed z-20 inset-0 flex items-center justify-center overflow-x-hidden overflow-y-auto outline-none focus:outline-none">
+          <div className="relative w-auto max-w-3xl mx-auto my-6">
+            <div className="relative flex flex-col w-full bg-slate-400 border-0 rounded-lg shadow-lg outline-none focus:outline-none">
+              <div className="relative p-6 flex-auto">
+                <form onSubmit={handleOtpVerification} className="flex flex-col justify-center items-center">
+                  <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
+                    Verify OTP
+                  </h1>
+                  <p className="font-semibold text-red-900 ">Check Spam Box</p>
+                  <div className="mt-4">
+                    <label
+                      htmlFor="otp"
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >
+                      Enter OTP
+                    </label>
+                    <input
+                      type="text"
+                      name="otp"
+                      id="otp"
+                      value={otp}
+                      onChange={(e) => setOtp(e.target.value)}
+                      className="bg-gray-50 border text-center border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      placeholder="Enter OTP"
+                      required
+                    />
+                  </div>
+                  <div className="mt-6 text-right">
+                    <button
+                      type="submit"
+                      className="text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 rounded-lg px-5 py-2.5 text-sm"
+                    >
+                      Verify OTP
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
       <div className="flex items-center justify-center">
         {submit ? (
           <div className="fixed z-20 top-48 lg:top-64 lg:py-12 lg:px-5 bg-blue-700 px-1 py-10 rounded-2xl">
@@ -261,3 +327,4 @@ function Register() {
 }
 
 export default Register;
+

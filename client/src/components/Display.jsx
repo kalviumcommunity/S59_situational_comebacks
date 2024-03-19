@@ -289,13 +289,13 @@ const resetFilters = () => {
                     </div>
                 )}
                 </div>
-                <div className="fixed top-72 left-10 md:left-64 md:ml-2 xl:left-96 xl:ml-56 z-30">
+                <div className="fixed z-10 top-52 flex w-screen justify-center items-center">
                     {edit && (
-                        <div className="flex items-center justify-center bg-slate-600 p-5 rounded-lg  flex-col">
-                            <button className="text-white font-semibold  bg-red-600  px-2 rounded-full absolute top-2 right-3" onClick={closeVer}>X</button>
+                        <div className="flex justify-center item-center bg-slate-600 p-4 rounded-2xl flex-col">
+                            <button className="text-white font-semibold  bg-red-600 w-16  px-2 rounded-full" onClick={closeVer}>Close</button>
                             <h1 className="text-2xl text-white font-semibold mt-4 xl:text-4xl xl:mb-3">Verify Your Identity</h1>
                             <form onSubmit={handleSubmit} className="flex items-center justify-center flex-col">
-                                <input type="text" placeholder="Enter your ID here" className="m-2 font-semibold text-center rounded-lg text-black" onChange={handleChange} value={enteredUserID} />
+                                <input type="text" placeholder="Enter your Collab here" className="m-2 font-semibold text-center rounded-lg text-black" onChange={handleChange} value={enteredUserID} />
                                 <button type="submit" className="inline-flex items-center m-2 p-2 px-4 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 hover:scale-110 transform transition duration-y focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Submit</button>
                             </form>
                             {idMatch ? <div className="text-white mt-3 font-semibold bg-red-700 p-2 rounded-2xl">You Didn't have Access</div> : null}
@@ -303,29 +303,33 @@ const resetFilters = () => {
                     )}
                 </div>
 
-                <div className="fixed z-20 top-52 sm:left-72 lg:left-80 lg:ml-4 xl:ml-48 xl:left-96 left-12">
-                    {showPPost ? <button className="text-white font-semibold  bg-red-600  px-2 rounded-full absolute top-2 right-3" onClick={closeUpd}>X</button> :null}
+                <div className="fixed z-10 lg:top-52 top-28 flex w-screen justify-center items-center">
+                    
                 
-                    {showPPost ? <UpdateDataForm selectedID={OrgID} initialFormData={filteredData.find(item => item._id === OrgID)} onCloseForm={toggleUpdateForm} /> : null}
+                    {showPPost ?<div className='flex justify-center items-end bg-slate-900 p-4 rounded-2xl flex-col'><button className="text-white font-semibold  bg-red-600 mb-2  px-2 rounded-full" onClick={closeUpd}>Close</button> <UpdateDataForm selectedID={OrgID} initialFormData={filteredData.find(item => item._id === OrgID)} onCloseForm={toggleUpdateForm} />
+                    </div> : null}
                 </div>
+                <div  className="fixed z-10 top-64 flex w-screen justify-center items-center">
                 {Deletit ? (
-                    <div className="fixed z-50 top-64 sm:left-72 lg:left-80 left-16 lg:ml-4 xl:p-5 xl:ml-64 xl:left-96  bg-slate-600 p-2 rounded-xl flex items-center justify-center flex-col">
-                        <button className="text-white font-semibold  bg-red-600  px-2 rounded-full absolute top-2 right-3" onClick={closeDel}>X</button>
-                        <h1 className="text-2xl text-white mb-2 mt-2 xl:text-4xl  font-semibold">Delete Post</h1>
+                    <div className="flex justify-center items-end bg-slate-600 p-4 rounded-2xl flex-col">
+                        <button className="text-white font-semibold  bg-red-600  px-2 rounded-full " onClick={closeDel}>Close</button>
+                        <h1 className="text-2xl text-white mb-2 mt-2 xl:text-4xl flex w-full item-center justify-center font-semibold">Delete Post</h1>
                         <div className="flex items-center justify-center text-center flex-col">
                             <form>
-                            <input type="text" placeholder="User ID" className="text-center font-semibold  rounded-xl" onChange={handleDel} />
+                            <input type="text" placeholder="Enter ID" className="text-center font-semibold  rounded-xl" onChange={handleDel} />
                             </form>
                             {DeletHandle ? <DeleteData selectedID={dID}  onComplete={handleDeleteComplete} /> : <div className="text-black"><p className="text-black mt-2 p-1 rounded-xl bg-yellow-500">Verify Your ID</p></div>}
                         </div>
                     </div>
                 ) : null}
+                </div>
             </div>
             
-            <div className="fixed z-10 top-52 sm:left-72 lg:left-80 lg:ml-4 xl:ml-64 left-12">
-            {displayForm? <button className="text-white font-semibold  bg-red-600  px-2 rounded-full absolute top-2 right-3" onClick={closeF}>X</button> :null}
+            <div className="fixed z-10 lg:top-52 top-28 flex w-screen justify-center items-center">
            
-                {displayForm ? <AddDataForm /> : null}
+           
+                {displayForm ?<div className='flex justify-center items-end bg-slate-900 p-4 rounded-2xl flex-col'><button className="text-white mb-2 font-semibold  bg-red-600  px-2 rounded-full" onClick={closeF}>Close</button>
+                 <AddDataForm /></div> : null}
             </div>
             {show? <SearUser onSearchChange={handleSearchChanging}></SearUser>:null}
             <Searching data={props.pro} onSearchChange={handleSearchChange} onUserIdSearchChange={handleUserIdSearchChange} />
@@ -365,9 +369,11 @@ const resetFilters = () => {
                             const isCurrentUser = userId === e.user || userId === import.meta.env.VITE_ADMIN;
                             return (
                                 <div className="m-5 max-w-sm p-6 flex justify-center items-center flex-col bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 hover:scale-110 transform transition duration-y bg-opacity-10" key={e._id}>
-                                    <h2 className="text-5xl mb-2 tracking-tight  text-white font-semibold p-5">{e.effectiveness}</h2>
-                                    <br />
+                                    <h2 className="text-5xl mb-2 mt-1 tracking-tight  text-white font-semibold p-5">{e.effectiveness}</h2>
+                                    <br /> 
+                                    <div className='overflow-y-auto scrollbar-thin scrollbar-thumb-gray-900 scrollbar-track-slate-700 max-h-44'>
                                     <h1 className="text-2xl mb-3 font-normal text-gray-200">{e.line}</h1>
+                                    </div>
                                     <br />
                                     <h2 className="p-1 font-semibold hover:scale-110 bg-black px-3 rounded-xl"> {e.context}</h2>
                                     <br/>

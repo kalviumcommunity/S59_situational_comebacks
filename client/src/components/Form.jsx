@@ -78,13 +78,13 @@ function AddDataForm() {
           <option value='Medium'>Medium</option>
           <option value='Low'>Low</option>
         </select>
-        <input
+        <textarea
           type='text'
           name='line'
           placeholder='Line'
           value={formData.line}
           onChange={handleChange}
-          className='text-black font-bold text-center rounded-2xl  my-2 '
+          className='text-black font-bold text-center rounded-2xl max-h-12  resize-y  my-2 '
           required
         />
         <input
@@ -96,7 +96,7 @@ function AddDataForm() {
           onChange={handleChange}
           required
         />
-        <button onClick={contriSection} className='inline-flex items-center p-2 text-sm font-medium text-center text-white bg-black-700 rounded-lg hover:bg-green-800 focus:ring-4 hover:scale-110 transform transition duration-y focus:outline-none focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800 mb-3' >
+        <button onClick={contriSection} className='inline-flex items-center p-2 text-sm font-medium text-center text-white  rounded-lg hover:bg-green-800 focus:ring-4 hover:scale-110 transform transition duration-y focus:outline-none bg-green-800 focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800 mb-3' >
           Collab Id
         </button>
         {chek && (
@@ -113,7 +113,7 @@ function AddDataForm() {
         )}
         <button
           type='submit'
-          className='inline-flex mt-2 items-center p-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 hover:scale-110 transform transition duration-y focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
+          className='inline-flex mt-1 items-center p-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 hover:scale-110 transform transition duration-y focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
         >
           Add Data
         </button>

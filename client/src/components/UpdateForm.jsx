@@ -82,7 +82,7 @@ function UpdateDataForm({ selectedID, initialFormData, onCloseForm }) {
                         <option value="Medium">Medium</option>
                         <option value="Low">Low</option>
                     </select>
-                    <input type="text" name="line" className='text-black font-bold text-center rounded-2xl  my-2' placeholder="Line" value={formData.line} onChange={handleChange}  required />
+                    <textarea type="text" name="line" className='text-black font-bold text-center rounded-2xl max-h-12  resize-y  my-2' placeholder="Line" value={formData.line} onChange={handleChange}  required />
                     <input type="text" name="context" className='text-black font-bold text-center rounded-2xl  my-2' placeholder="Context" value={formData.context}  onChange={handleChange} required />
                     <button type="submit" className='inline-flex items-center m-2  p-2 text-sm font-medium text-center text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 hover:scale-110 transform transition duration-y focus:outline-none focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800'>Update Data</button>
                 </form>

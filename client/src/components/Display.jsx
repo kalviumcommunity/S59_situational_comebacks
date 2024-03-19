@@ -203,7 +203,7 @@ function Display(props) {
 
     const handleContribute = (userId, id) => {
         setEdit(true); 
-        setSelectedID(id);
+        setSelectedID(userId);
         setOrgID(id);
     };
 
@@ -306,7 +306,7 @@ const resetFilters = () => {
                 <div className="fixed z-20 top-52 sm:left-72 lg:left-80 lg:ml-4 xl:ml-48 xl:left-96 left-12">
                     {showPPost ? <button className="text-white font-semibold  bg-red-600  px-2 rounded-full absolute top-2 right-3" onClick={closeUpd}>X</button> :null}
                 
-                    {showPPost ? <UpdateDataForm selectedID={OrgID} initialFormData={filteredData.find(item => item._id === selectedID)} onCloseForm={toggleUpdateForm} /> : null}
+                    {showPPost ? <UpdateDataForm selectedID={OrgID} initialFormData={filteredData.find(item => item._id === OrgID)} onCloseForm={toggleUpdateForm} /> : null}
                 </div>
                 {Deletit ? (
                     <div className="fixed z-50 top-64 sm:left-72 lg:left-80 left-16 lg:ml-4 xl:p-5 xl:ml-64 xl:left-96  bg-slate-600 p-2 rounded-xl flex items-center justify-center flex-col">

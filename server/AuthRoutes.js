@@ -8,12 +8,14 @@ require('dotenv').config();
 const transporter = nodemailer.createTransport({
   host: process.env.HOST,
   port: 587,
-  secure: false, 
+  secure: false,
   auth: {
-    user: process.env.EMAIL, 
-    pass: process.env.PASS, 
+    user: process.env.EMAIL,
+    pass: process.env.PASS,
   },
+  debug: true, 
 });
+
 
 router.post('/register', async (req, res) => {
   const { userName, emailId, password, userId, } = req.body;
@@ -89,7 +91,7 @@ router.post('/login', async (req, res) => {
       return res.status(401).json({ error: 'Invalid email or password' });
     }
 
-    const token = jwt.sign({ userId: user._id }, process.env.SECRET_KEY, { expiresIn: '2h' });
+    const token = jwt.sign({ userId: user._id }, process.env.SECRET_KEY, { expiresIn: '24h' });
 
     const currentTime = new Date().toLocaleString();
 

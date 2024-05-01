@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { toast, ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css'
+import { useAuth } from './Authcontext';
 
 function UpdateDataForm({ selectedID, initialFormData, onCloseForm }) {
     const location = useLocation();
@@ -13,10 +14,11 @@ function UpdateDataForm({ selectedID, initialFormData, onCloseForm }) {
     });
 
     const [showForm, setShowForm] = useState(true);
+    const { token, setToken } = useAuth();
 
 
-    const apiUrl = `http://localhost:3000/api${location.pathname}/${selectedID}`;
-    const apiUrlb = `http://localhost:3000/api${location.pathname}`;
+    const apiUrl = `${import.meta.env.VITE_URL}/api${location.pathname}/${selectedID}`;
+    const apiUrlb = `${import.meta.env.VITE_URL}/api${location.pathname}`;
 
     useEffect(() => {
         const fetchData = async () => {
@@ -33,14 +35,14 @@ function UpdateDataForm({ selectedID, initialFormData, onCloseForm }) {
             }
         };
         fetchData();
-    }, [apiUrlb, selectedID]);
+    }, [selectedID]);
 
     useEffect(() => {
         
         if (initialFormData) {
             setFormData(initialFormData);
         }
-    }, [initialFormData]);
+    }, []);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -48,15 +50,16 @@ function UpdateDataForm({ selectedID, initialFormData, onCloseForm }) {
             const response = await fetch(apiUrl, {
                 method: 'PUT',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
                 },
                 body: JSON.stringify(formData)
             });
             if (response.ok) {
-                toast.success("Data Updated Successfully , Click Refresh To See Changes");
+                toast.success("Data Updated Successfully");
                 onCloseForm();
             } else {
-                toast.info("Failed to Update data")
+                toast.info('Login to Add Data');
             }
         } catch (error) {
             toast.error("Error Occurred")
@@ -79,7 +82,7 @@ function UpdateDataForm({ selectedID, initialFormData, onCloseForm }) {
                         <option value="Medium">Medium</option>
                         <option value="Low">Low</option>
                     </select>
-                    <input type="text" name="line" className='text-black font-bold text-center rounded-2xl  my-2' placeholder="Line" value={formData.line} onChange={handleChange}  required />
+                    <textarea type="text" name="line" className='text-black font-bold text-center rounded-2xl max-h-12  resize-y  my-2' placeholder="Line" value={formData.line} onChange={handleChange}  required />
                     <input type="text" name="context" className='text-black font-bold text-center rounded-2xl  my-2' placeholder="Context" value={formData.context}  onChange={handleChange} required />
                     <button type="submit" className='inline-flex items-center m-2  p-2 text-sm font-medium text-center text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 hover:scale-110 transform transition duration-y focus:outline-none focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800'>Update Data</button>
                 </form>
